@@ -1,0 +1,182 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_MAIN                ICON                    "main.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAIN DIALOGEX 22, 17, 249, 169
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_MINIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于"
+FONT 10, "宋体", 400, 0, 0x86
+BEGIN
+    LISTBOX         IDC_LIST_INFO,0,72,248,96,LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_EDIT_FILE,0,57,208,12,ES_AUTOHSCROLL | ES_READONLY
+    COMBOBOX        IDC_LIST_PORT,37,7,46,75,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "选择文件",IDC_BTN_SELECT,210,57,37,12
+    LTEXT           "端口号:",IDC_STATIC,5,10,29,8
+    PUSHBUTTON      "开始烧录",IDC_BTN_DOWNLOAD,176,8,67,41
+    COMBOBOX        IDC_LIST_BAUD,37,22,46,144,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "波特率:",IDC_STATIC,5,24,29,8
+    LTEXT           "地址:",IDC_STATIC,96,11,20,8
+    EDITTEXT        IDC_EDIT_LOADADDR,119,8,46,12
+    CONTROL         "烧录后自动运行 ",IDC_BTN_AUTOBOOT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,96,38,69,10
+    GROUPBOX        "",IDC_STATIC,0,0,89,55
+    GROUPBOX        "",IDC_STATIC,172,0,76,55
+    GROUPBOX        "",IDC_STATIC,91,0,79,55
+    PUSHBUTTON      "枚举串口",IDC_BTN_ENUM,7,38,76,12
+    CONTROL         "烧录前擦除芯片 ",IDC_BTN_AUTOERASE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,96,24,69,10
+END
+
+IDD_ABOUT DIALOGEX 0, 0, 138, 101
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于"
+FONT 9, "宋体", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,47,84,50,14
+    LTEXT           "静态",IDC_TEXT_CAPTION,3,3,129,8
+    LTEXT           "静态",IDC_TEXT_VERSION,3,15,129,8
+    LTEXT           "静态",IDC_TEXT_DATE,3,26,129,8
+    LTEXT           "静态",IDC_TEXT_EMAIL,3,38,129,8
+    EDITTEXT        IDC_EDIT_LIC,2,52,135,26,ES_MULTILINE | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_MAIN, DIALOG
+    BEGIN
+        RIGHTMARGIN, 195
+        BOTTOMMARGIN, 9
+    END
+
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 131
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 94
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "CompanyName", "kerndev@foxmail.com"
+            VALUE "FileDescription", "STM32 UART ISP"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "STM32Loader"
+            VALUE "LegalCopyright", "Copyright. All Rights Reserved"
+            VALUE "OriginalFilename", "STM32Loader.exe"
+            VALUE "ProductName", "STM32 UART ISP"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
