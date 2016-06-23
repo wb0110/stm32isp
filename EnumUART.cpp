@@ -3,30 +3,49 @@
 * 蒋晓岗<kerndev@foxmail.com>
 */
 #include "stdafx.h"
+#include "EnumUART.h"
 #include <WinIoCtl.h>
 #include <Setupapi.h>
 #pragma comment(lib, "Setupapi.lib")
 
 struct UARTNODE
 {
-	char szName[16];
-	char szDesc[256];
+	char szPortName[16];
+	char szDeviceName[MAX_PATH];
 	struct UARTNODE* next;
 };
 
 static struct UARTNODE* head;
 static struct UARTNODE* tail;
 
-static void AppendUART(char* pzName, char* pzDesc)
+
+static void GetPortNameByFriendlyName(char* pzPortName, char* pzFriendlyName)
+{
+	char* begin;
+	char* end;
+	char* pch;
+	begin=strrchr(pzFriendlyName,'(');
+	end  =strrchr(pzFriendlyName,')');
+	if((begin != NULL) && (end!=NULL)) 
+	{
+		for(pch=begin+1;pch!=end;pch++)
+		{
+			*pzPortName = *pch;
+			pzPortName++;
+		}
+	}
+	*pzPortName = 0;
+}
+
+
+static void AppendUART(char* pzFriendlyName)
 {
 	struct UARTNODE* node;
 	node = (struct UARTNODE*)malloc(sizeof(struct UARTNODE));
 	if(node != NULL)
 	{
-		strcpy(node->szName,pzName);
-		strcpy(node->szDesc,pzDesc);
-		node->next = NULL;
-		
+		strcpy(node->szDeviceName,pzFriendlyName);
+		GetPortNameByFriendlyName(node->szPortName,pzFriendlyName);
 		if(head == NULL)
 		{
 			head = node;
@@ -37,57 +56,8 @@ static void AppendUART(char* pzName, char* pzDesc)
 			tail->next = node;
 			tail = node;
 		}
+		node->next = NULL;
 	}
-}
-
-static void GetNameByDesc(char* pzName, char* pzDesc)
-{
-	char* begin;
-	char* end;
-	char* pch;
-	begin=strrchr(pzDesc,'(');
-	end  =strrchr(pzDesc,')');
-	if((begin != NULL) && (end!=NULL)) 
-	{
-		for(pch=begin+1;pch!=end;pch++)
-		{
-			*pzName = *pch;
-			pzName++;
-		}
-	}
-	*pzName = 0;
-}
-
-char* GetUARTName(int index)
-{
-	int i;
-	struct UARTNODE* node;
-	i=0;
-	for(node=head;node!=NULL;node=node->next)
-	{
-		if(i == index)
-		{
-			return node->szName;
-		}
-		i++;
-	}
-	return NULL;
-}
-
-char* GetUARTDesc(int index)
-{
-	int i;
-	struct UARTNODE* node;
-	i=0;
-	for(node=head;node!=NULL;node=node->next)
-	{
-		if(i == index)
-		{
-			return node->szDesc;
-		}
-		i++;
-	}
-	return NULL;
 }
 
 void  FreeUART(void)
@@ -103,7 +73,6 @@ void  FreeUART(void)
 	tail = NULL;
 }
 
-
 int EnumUART(void)
 {
 	int i;
@@ -113,42 +82,80 @@ int EnumUART(void)
 	PBYTE Buffer;
 	DWORD BufferSize; 
 	DWORD RequireSize;
-	BOOL  bRet;
-	char PortName[32];
-	count = 0;
+	BOOL  ret;
 
 	FreeUART();
 
-	//访问系统的硬件库
-	hDevInfo = SetupDiGetClassDevs(&GUID_CLASS_COMPORT, NULL, NULL, DIGCF_DEVICEINTERFACE|DIGCF_PRESENT); 
+	hDevInfo = SetupDiGetClassDevs(NULL, NULL, NULL, DIGCF_ALLCLASSES|DIGCF_PRESENT); 
 	if(INVALID_HANDLE_VALUE == hDevInfo) 
 	{
 		return FALSE; 
 	}
-
+	
+	count = 0;
 	BufferSize = 1024;
 	Buffer = (PBYTE)malloc(BufferSize);
 	DevInfoData.cbSize=sizeof(SP_DEVINFO_DATA); 
 
-	//枚举硬件，获得需要的接口 
 	for(i=0;TRUE;i++) 
 	{
-		bRet = SetupDiEnumDeviceInfo(hDevInfo, i, &DevInfoData);
-		if(!bRet)
+		ret = SetupDiEnumDeviceInfo(hDevInfo, i, &DevInfoData);
+		if(!ret)
 		{
 			break;
 		}
-
-		bRet = SetupDiGetDeviceRegistryProperty(hDevInfo,&DevInfoData,SPDRP_FRIENDLYNAME,NULL,Buffer,BufferSize,&RequireSize);
-		if(bRet)
+		ret = SetupDiGetDeviceRegistryProperty(hDevInfo,&DevInfoData,SPDRP_CLASS,NULL,Buffer,BufferSize,&RequireSize);
+		if(!ret)
 		{
-			GetNameByDesc(PortName,(char*)Buffer);
-			AppendUART(PortName,(char*)Buffer);
-			count++;
+			continue;
 		}
+		if(memcmp(Buffer,"Ports",5)!=0)
+		{
+			continue;
+		}
+		ret = SetupDiGetDeviceRegistryProperty(hDevInfo,&DevInfoData,SPDRP_FRIENDLYNAME,NULL,Buffer,BufferSize,&RequireSize);
+		if(!ret)
+		{
+			continue;
+		}
+		AppendUART((char*)Buffer);
+		count++;
 	}
 
 	SetupDiDestroyDeviceInfoList(hDevInfo);
 	free(Buffer);
 	return count;
+}
+
+
+char* GetPortName(int index)
+{
+	int i;
+	struct UARTNODE* node;
+	i=0;
+	for(node=head;node!=NULL;node=node->next)
+	{
+		if(i == index)
+		{
+			return node->szPortName;
+		}
+		i++;
+	}
+	return NULL;
+}
+
+char* GetDeviceName(int index)
+{
+	int i;
+	struct UARTNODE* node;
+	i=0;
+	for(node=head;node!=NULL;node=node->next)
+	{
+		if(i == index)
+		{
+			return node->szDeviceName;
+		}
+		i++;
+	}
+	return NULL;
 }

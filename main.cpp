@@ -21,7 +21,7 @@ static void FillSerialPort(HWND hWnd)
 	count=EnumUART();
 	for(i=0;i<count;i++)
 	{
-		SendMessage(hWnd,CB_ADDSTRING,0,(LPARAM)GetUARTName(i));
+		SendMessage(hWnd,CB_ADDSTRING,0,(LPARAM)GetPortName(i));
 	}
 	SendMessage(hWnd,CB_SETCURSEL,0,0);
 }

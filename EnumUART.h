@@ -2,8 +2,8 @@
 #define __ENUM_UART_H
 
 int   EnumUART(void);
-char* GetUARTName(int index);
-char* GetUARTDesc(int index);
+char* GetPortName(int index);
+char* GetDeviceName(int index);
 void  FreeUART(void);
 
 #endif
